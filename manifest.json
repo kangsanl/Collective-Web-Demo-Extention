@@ -1,22 +1,22 @@
 {
-  "name": "Color Changer",
+  "name": "Collective-Web",
   "author": "Microsoft Edge Extension Developer",
-  "description": "Change the color of the header on docs.microsoft.com",
+  "description": "Collect Web contents from sites",
   "version": "1.0",
   "icons": {
     "25": "images/color-changer25.png",
     "48": "images/color-changer48.png"
   },
   "permissions": [
-    "*://docs.microsoft.com/*",
-    "tabs"
+    "tabs",
+    "<all_urls>"
   ], 
   "browser_action": {
     "default_icon": {
       "20": "images/color-changer20.png",
       "40": "images/color-changer40.png"
     },
-    "default_title": "Color Changer",
+    "default_title": "Collective Web",
     "default_popup": "popup.html"
   },
   "content_scripts": [{
