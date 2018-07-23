@@ -1,20 +1,21 @@
 // get the URL of the page
 (function(){
-    var url = document.location.href;
+    var url = document.location.href; 
 
-    // example code to change color on www.airbnb.com
-    setTimeout(()=>{
-        console.log("timeout");
-        var targetElement = document.getElementById('MagicCarpetSearchBar');
-        targetElement.style.backgroundColor = 'blue';
-    }, 5000);   
+    function extractDom(targetDOM)
+    {
+        setTimeout(()=>{
+            console.log("extractDom");
+            var targetElement = document.getElementById(targetDOM);
+            if (targetElement)
+            {
+                console.log(targetElement);
+            }
+        }, 3000); // wait for 3 sec till the page is fully loaded
+    }
 
-    // if not on a docs.microsoft.com domain
-    /*if (url.indexOf("//docs.microsoft.com") <= -1) {
-        // send inactive icons
-        browser.runtime.sendMessage({
-            "iconPath20": "images/inactive20.png",
-            "iconPath40": "images/inactive40.png"
-        });
-    }*/
+    // Expedia Flight Search
+    if (url.indexOf("//www.expedia.com/Flights-Search") >= 0) {
+        extractDom('flight-listing-container');
+    }
 })();
