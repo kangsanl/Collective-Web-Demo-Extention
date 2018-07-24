@@ -1,4 +1,4 @@
-// listen for sendMessage() from content script
+// listen for message from content script
 browser.runtime.onConnect.addListener(function (port) {
     console.assert(port.name === "entityExtraction");
     console.log("port handler");
@@ -34,3 +34,12 @@ function postExtractEntitiesRequest(regionOfInterest) {
     xhr.open("POST", "http://10.127.195.142/", true);
     xhr.send(formData); 
 }
+
+browser.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+
+        // POST API
+        console.log(request.apiSignature);
+        console.log(request.type);
+        console.log(request.body);
+    });

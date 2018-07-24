@@ -23,7 +23,15 @@
             {
                 var button = this;
                 var selectedList = button.parentElement;
-                console.log(selectedList);
+
+                browser.runtime.sendMessage({
+                    type: 'post',
+                    apiSignature: 'http://localhost:8080/pushCollection',
+                    body: selectedList
+                  });
+                  
+                // remove button after clicking
+                selectedList.removeChild(button);
             }
 
             var button = document.createElement("Button");
