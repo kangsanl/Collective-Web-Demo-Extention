@@ -1,14 +1,33 @@
 // listen for sendMessage() from content script
 browser.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-        // set the icon for the browser action from sendMessage() in content script
-        browser.browserAction.setIcon({
-            path: {
-                "20": request.iconPath20,
-                "40": request.iconPath40
-            },
-            tabId: sender.tab.id
-        });
-        // disable browser action for the current tab
-        browser.browserAction.disable(sender.tab.id);
-    });
+        console.log("received message");
+		console.log(request.msgType);
+		if (request.msgType === "extractEntities") {
+            console.log(encodeURIComponent(request.regionOfInterest));
+			postExtractEntitiesRequest(request.regionOfInterest);
+		}
+    }
+);
+
+function postExtractEntitiesRequest(regionOfInterest) {
+    console.log("asking service to extract entities");
+	
+    var formData = new FormData();
+    formData.append("html", encodeURIComponent(regionOfInterest));  
+
+    var xhr = new XMLHttpRequest();  
+    xhr.onreadystatechange = function () { 
+        console.log("response received" + xhr.readyState);
+		//if (xhr.readyState == 4) {
+			//if (xhr.status == 200) {
+				//var response = xhr.responseText;
+				var response = "[{\"Type\":\"Flight\",\"FlightTime\":\"10:15pm - 9:11am\",\"Airline\":\"Delta\",\"Stops\":\"Nonstop\",\"Duration\":\"10h 20m\",\"From\":\"Depature airport: SEA\",\"To\":\"Arrival airport: JFK\",\"Price\":\"$400\"}]";
+				var parsedResponse = JSON.parse(response);
+				// {"Type":"Flight","FlightTime":"10:15pm - 9:11am","Airline":"Delta","Stops":"Nonstop","Duration":"10h 20m","From":"Depature airport: SEA","To":"Arrival airport: JFK","Price":"$400"}
+		//	}
+		//}
+    };
+    xhr.open("POST", "http://microsoft.com", true);
+    xhr.send(formData); 
+}
