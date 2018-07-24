@@ -15,13 +15,20 @@
         }, 3000); // wait for 3 sec till the page is fully loaded
     }
 
-    function addCollectiveButtons(query)
+    function addCollectButtons(query)
     {
-        function addCollectiveBtnToElement(element)
+        function addCollectBtnToElement(element)
         {
+            function OnCollectBtnClick(element)
+            {
+                var button = this;
+                var selectedList = button.parentElement;
+                console.log(selectedList);
+            }
+
             var button = document.createElement("Button");
             button.textContent = '+';
-            button.classList.add('collectiveBtn');
+            button.classList.add('collecBtn');
             button.style.margin = '0px 0px 0px 0px';
             button.style.position = 'absolute';
             button.style.top = '-15px';
@@ -30,6 +37,7 @@
             button.style.height = '30px';
             button.style.backgroundColor = 'greenYellow';
             button.style.zIndex = '9999';
+            button.addEventListener("click", OnCollectBtnClick); 
 
             element.appendChild(button);
         }
@@ -39,7 +47,7 @@
         if(elements)
         {
             elements.forEach(element => {
-                addCollectiveBtnToElement(element)
+                addCollectBtnToElement(element)
             });
         }
     }
@@ -49,7 +57,7 @@
         extractDom('flight-listing-container');
 
         setTimeout(()=>{
-            addCollectiveButtons('#flight-listing-container .offer-listing');
+            addCollectButtons('#flight-listing-container .offer-listing');
         }, 3000);
     }
 })();
