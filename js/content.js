@@ -75,7 +75,7 @@ function extractEntitiesInBackground(targetElement) {
     console.log("sending message");
     port.postMessage({
         "msgType": "extractEntities",
-        "regionOfInterest": JSON.stringify('' + targetElement.innerHTML) //make innerHTML string instead of object, and stringify to escape html
+        "regionOfInterest": targetElement.innerHTML
     });
     console.log("sent message");
 }
