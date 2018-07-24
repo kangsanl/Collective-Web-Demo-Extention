@@ -1,14 +1,17 @@
 // listen for sendMessage() from content script
-browser.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
+browser.runtime.onConnect.addListener(function (port) {
+    console.assert(port.name === "entityExtraction");
+    console.log("port handler");
+    port.onMessage.addListener(function (request) {
         console.log("received message");
-		console.log(request.msgType);
-		if (request.msgType === "extractEntities") {
-            console.log(encodeURIComponent(request.regionOfInterest));
-			postExtractEntitiesRequest(request.regionOfInterest);
-		}
-    }
-);
+        console.log(request.msgType);
+        if (request.msgType === "extractEntities") {
+            //console.log(encodeURIComponent(request.regionOfInterest));
+            postExtractEntitiesRequest(request.regionOfInterest);
+        }
+    });
+    console.log("port handler after");
+});
 
 function postExtractEntitiesRequest(regionOfInterest) {
     console.log("asking service to extract entities");
@@ -18,7 +21,7 @@ function postExtractEntitiesRequest(regionOfInterest) {
 
     var xhr = new XMLHttpRequest();  
     xhr.onreadystatechange = function () { 
-        console.log("response received" + xhr.readyState);
+        console.log("response received " + xhr.readyState);
 		//if (xhr.readyState == 4) {
 			//if (xhr.status == 200) {
 				//var response = xhr.responseText;
@@ -28,6 +31,6 @@ function postExtractEntitiesRequest(regionOfInterest) {
 		//	}
 		//}
     };
-    xhr.open("POST", "http://microsoft.com", true);
+    xhr.open("POST", "http://10.127.195.142/", true);
     xhr.send(formData); 
 }
