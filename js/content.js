@@ -1,6 +1,7 @@
 // get the URL of the page
 (function(){
     var url = document.location.href; 
+    //var collectedHotels = [];
 
     function extractDom(targetDOM)
     {
@@ -14,11 +15,12 @@
         }, 7000); // wait for 7 sec till the page is fully loaded
     }
 
-    function addCollectButtons(query)
+    function addCollectButtons(query, type)
     {
         function addCollectBtnToElement(element)
         {
-            function OnCollectBtnClick(element)
+            // This is for Expedia and Kayak
+            function OnCollectBtnClickForList(element)
             {
                 var button = this;
                 var selectedList = button.parentElement;
@@ -28,8 +30,23 @@
                 console.log(selectedList.textContent);
                 browser.runtime.sendMessage({
                     type: 'post',
-                    apiSignature: 'http://localhost:8080/pushCollection',
-                    body: selectedList
+                    apiSignature: 'http://127.0.0.1:86/api/v1/picl_entities?url=' + url,
+                    body: selectedList.textContent
+                  });
+            }
+
+            // This is for Trip Advisor
+            function OnCollectBtnClickForPage(element)
+            {
+                var button = this;
+                var selectedList = button.parentElement;
+                // remove button after clicking
+                selectedList.removeChild(button);
+                console.log(url);
+                browser.runtime.sendMessage({
+                    type: 'get',
+                    apiSignature: 'http//127.0.0.1:86/api/v1/ws_entities?url=' + url,
+                    body: null
                   });
             }
 
@@ -45,7 +62,18 @@
             button.style.backgroundColor = 'greenYellow';
             button.style.zIndex = '9999';
             button.style.color = 'black';
-            button.addEventListener("click", OnCollectBtnClick); 
+
+            if (type === 'list')
+            {
+                button.addEventListener("click", OnCollectBtnClickForList);
+            }
+            else if (type === 'page')
+            {
+                button.addEventListener("click", OnCollectBtnClickForPage);
+            }
+            else{
+                throw new Error();
+            }
 
             element.appendChild(button);
 
@@ -70,13 +98,19 @@
         //extractDom('flight-listing-container');
 
         setInterval(()=>{
-            addCollectButtons('#flight-listing-container .offer-listing');
+            addCollectButtons('#flight-listing-container .offer-listing', 'list');
         }, 3000);
     }
     else if(url.indexOf("//www.kayak.com/flights") >= 0)
     {
         setInterval(()=>{
-            addCollectButtons('div.inner-grid.keel-grid, div.Flights-Results-FlightResultItem');
+            addCollectButtons('div.inner-grid.keel-grid, div.Flights-Results-FlightResultItem', 'list');
+        }, 3000);
+    }
+    else if(url.indexOf("//www.tripadvisor.com/Hotel_Review"))
+    {
+        setTimeout(()=>{
+            addCollectButtons('.hotelDescription', 'page');
         }, 3000);
     }
 })();

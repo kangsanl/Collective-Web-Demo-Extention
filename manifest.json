@@ -27,7 +27,7 @@
     "run_at": "document_end"
 }],
   "background": {
-    "scripts": ["js/background.js"],
+    "scripts": ["js/jquery.js", "js/background.js"],
     "persistent": true
   },
   "web_accessible_resources": ["template/dialog.html"]
