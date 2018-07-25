@@ -45,7 +45,7 @@
                 console.log(url);
                 browser.runtime.sendMessage({
                     type: 'get',
-                    apiSignature: 'http//127.0.0.1:86/api/v1/ws_entities?url=' + url,
+                    apiSignature: 'http//127.0.0.1:86/api/v1/entities?url=' + url,
                     body: null
                   });
             }
