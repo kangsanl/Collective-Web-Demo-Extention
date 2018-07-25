@@ -1,12 +1,17 @@
-function sendEntity(type, apiSignature, body) {
-    console.log("sending entity to server");
+function sendRequest(type, apiSignature, body, sendResponse) {
+    console.log("sending request to server");
 
     var xhr = new XMLHttpRequest();    
     xhr.onreadystatechange = function () { 
         console.log("response received " + xhr.readyState);
 		if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                console.log("entity pushed to the server");
+                console.log("request successfully processed by the server");
+
+                if (sendResponse) {
+                    console.log("sending response");
+                    sendResponse(xhr.response);
+                }
 			}
 		}
     };
@@ -28,6 +33,10 @@ browser.runtime.onMessage.addListener(
         console.log("received message");
         console.log(request.msgType);
         if (request.msgType === "extractEntities") {
-            sendEntity(request.type, request.apiSignature, request.body);
+            sendRequest(request.type, request.apiSignature, request.body, null);
+        }
+        else if (request.msgType === "insights") {
+            sendRequest(request.type, request.apiSignature, request.body, sendResponse);
+            return true; // indicates the response will come asynchronoulsy
         }
     });

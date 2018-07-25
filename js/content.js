@@ -95,11 +95,19 @@
             console.log("timer fired");
             addCollectButtons('#flight-listing-container .offer-listing', 'list');
         }, 3000);
+
+        setTimeout(() => {
+            getInsights();
+        }, 3000);
     }
     else if(url.indexOf("//www.kayak.com/flights") >= 0)
     {
         setInterval(()=>{
             addCollectButtons('div.inner-grid.keel-grid, div.Flights-Results-FlightResultItem', 'list');
+        }, 3000);
+
+        setTimeout(() => {
+            getInsights();
         }, 3000);
     }
     else if(url.indexOf("//www.tripadvisor.com/Hotel_Review"))
@@ -107,7 +115,31 @@
         setTimeout(()=>{
             addCollectButtons('.hotelDescription', 'page');
         }, 3000);
+
+        setTimeout(() => {
+            getInsights();
+        }, 3000);
     }
 })();
 
 
+function getInsights() {
+    console.log("sending message");
+    var url = document.location.href; 
+    browser.runtime.sendMessage({
+        msgType: "insights",
+        type: 'get',
+        apiSignature: 'http://127.0.0.1:86/api/v1/insights?url=' + url,
+        body: null
+    }, function (response) {
+        console.log("response");
+        console.log(response);
+        /*if (response != undefined) {
+            if (response.card) {
+                g_card = response.card;
+                callback(response.card);
+            }
+        }*/
+    });
+    console.log("message sent");
+}
