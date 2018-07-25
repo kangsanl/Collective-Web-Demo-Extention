@@ -142,12 +142,16 @@ function getInsights() {
         console.log(startDateStr);
         console.log(endDateStr);
 
-        // Set values based on Insight
-        document.getElementById("flight-departing-hp-flight").value = startDateStr;
-        document.getElementById("flight-returning-hp-flight").value = endDateStr;
-        document.getElementById("flight-origin-hp-flight").value = parsedResponse.StartDestination;
-        document.getElementById("flight-destination-hp-flight").value = parsedResponse.EndDestination;
-        console.log("insights set");
+        if (url.indexOf("//www.expedia.com/") >= 0) {
+            // Set values based on Insight
+            document.getElementById("flight-departing-hp-flight").value = startDateStr;
+            document.getElementById("flight-returning-hp-flight").value = endDateStr;
+            document.getElementById("flight-origin-hp-flight").value = parsedResponse.StartDestination;
+            document.getElementById("flight-destination-hp-flight").value = parsedResponse.EndDestination;
+            console.log("insights set");
+        } else if (url.indexOf("//www.tripadvisor.com/") >= 0) {
+            console.log("TripAdvisor case");
+        }
     });
     console.log("message sent");
 }
