@@ -40,7 +40,7 @@
                 browser.runtime.sendMessage({
                     msgType: "extractEntities",
                     type: 'get',
-                    apiSignature: 'http//127.0.0.1:86/api/v1/entities?url=' + url,
+                    apiSignature: 'http://127.0.0.1:86/api/v1/entities?url=' + url,
                     body: null
                 });
                 console.log("message sent");
