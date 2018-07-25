@@ -1,18 +1,10 @@
+const EXPEDIA = "//www.expedia.com/Flights-Search";
+const KAYAK = "//www.kayak.com";
+const TRIP_ADVISOR = "//www.kayak.com";
+
 // get the URL of the page
 (function(){
     var url = document.location.href; 
-
-    function extractDom(targetDOM)
-    {
-        setTimeout(()=>{
-            console.log("extractDom");
-            var targetElement = document.getElementById(targetDOM);
-            if (targetElement)
-            {
-                extractEntitiesInBackground(targetElement);
-            }
-        }, 7000); // wait for 7 sec till the page is fully loaded
-    }
 
     function addCollectButtons(query)
     {
@@ -25,12 +17,8 @@
                 // remove button after clicking
                 selectedList.removeChild(button);
 
-                console.log(selectedList.textContent);
-                browser.runtime.sendMessage({
-                    type: 'post',
-                    apiSignature: 'http://localhost:8080/pushCollection',
-                    body: selectedList
-                  });
+                // user clicked the button - notify server
+                notifyServer(selectedList);
             }
 
             var button = document.createElement("Button");
@@ -66,10 +54,9 @@
     }
 
     // Expedia Flight Search
-    if (url.indexOf("//www.expedia.com/Flights-Search") >= 0) {
-        //extractDom('flight-listing-container');
-
+    if (url.indexOf(EXPEDIA) >= 0) {
         setInterval(()=>{
+            console.log("timer fired");
             addCollectButtons('#flight-listing-container .offer-listing');
         }, 3000);
     }
@@ -81,12 +68,12 @@
     }
 })();
 
-function extractEntitiesInBackground(targetElement) {
-    var port = browser.runtime.connect({ name: "entityExtraction" });
+function notifyServer(targetElement) {
     console.log("sending message");
-    port.postMessage({
+    browser.runtime.sendMessage({
         "msgType": "extractEntities",
-        "regionOfInterest": targetElement.innerHTML
+        "regionOfInterest": targetElement.textContent
     });
     console.log("sent message");
+    console.log(targetElement.textContent);
 }
