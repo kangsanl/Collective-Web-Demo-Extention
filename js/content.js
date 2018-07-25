@@ -135,9 +135,9 @@ function getInsights() {
         console.log(parsedResponse.EndDestination);
 
         var startDate = new Date(parsedResponse.StartDate);
-        var startDateStr = (startDate.getMonth() + 1) + '/' + startDate.getDate() + '/' + startDate.getFullYear();
+        var startDateStr = (startDate.getMonth() + 1) + '/' + startDate.getDate() + '/' + (startDate.getFullYear() + 1);
         var endDate = new Date(parsedResponse.EndDate);
-        var endDateStr = (endDate.getMonth() + 1) + '/' + endDate.getDate() + '/' + endDate.getFullYear();
+        var endDateStr = (endDate.getMonth() + 1) + '/' + endDate.getDate() + '/' + (endDate.getFullYear() + 1);
 
         console.log(startDateStr);
         console.log(endDateStr);
