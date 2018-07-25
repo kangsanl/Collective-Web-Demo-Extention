@@ -18,9 +18,9 @@ function sendRequest(type, apiSignature, body, sendResponse) {
     xhr.open(type, apiSignature, true);
 
     if (body) {
-        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
         //xhr.send(encodeURIComponent(body));
-        xhr.send(body);
+        xhr.send(JSON.stringify({ "HTMLTextData": body}));
     }
     else {
         xhr.send();
