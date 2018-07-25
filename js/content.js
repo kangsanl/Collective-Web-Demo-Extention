@@ -3,18 +3,6 @@
     var url = document.location.href; 
     //var collectedHotels = [];
 
-    function extractDom(targetDOM)
-    {
-        setTimeout(()=>{
-            console.log("extractDom");
-            var targetElement = document.getElementById(targetDOM);
-            if (targetElement)
-            {
-                extractEntitiesInBackground(targetElement);
-            }
-        }, 7000); // wait for 7 sec till the page is fully loaded
-    }
-
     function addCollectButtons(query, type)
     {
         function addCollectBtnToElement(element)
@@ -27,12 +15,16 @@
                 // remove button after clicking
                 selectedList.removeChild(button);
 
-                console.log(selectedList.textContent);
+                //console.log(selectedList.textContent);
+
+                console.log("sending message");
                 browser.runtime.sendMessage({
+                    msgType: "extractEntities",
                     type: 'post',
-                    apiSignature: 'http://127.0.0.1:86/api/v1/picl_entities?url=' + url,
+                    apiSignature: "http://127.0.0.1:86/api/v1/picl_entities?url=" + url,
                     body: selectedList.textContent
-                  });
+                });
+                console.log("message sent");
             }
 
             // This is for Trip Advisor
@@ -43,11 +35,15 @@
                 // remove button after clicking
                 selectedList.removeChild(button);
                 console.log(url);
+
+                console.log("sending message");
                 browser.runtime.sendMessage({
+                    msgType: "extractEntities",
                     type: 'get',
                     apiSignature: 'http//127.0.0.1:86/api/v1/entities?url=' + url,
                     body: null
-                  });
+                });
+                console.log("message sent");
             }
 
             var button = document.createElement("Button");
@@ -95,9 +91,8 @@
 
     // Expedia Flight Search
     if (url.indexOf("//www.expedia.com/Flights-Search") >= 0) {
-        //extractDom('flight-listing-container');
-
         setInterval(()=>{
+            console.log("timer fired");
             addCollectButtons('#flight-listing-container .offer-listing', 'list');
         }, 3000);
     }
@@ -115,12 +110,4 @@
     }
 })();
 
-function extractEntitiesInBackground(targetElement) {
-    var port = browser.runtime.connect({ name: "entityExtraction" });
-    console.log("sending message");
-    port.postMessage({
-        "msgType": "extractEntities",
-        "regionOfInterest": targetElement.innerHTML
-    });
-    console.log("sent message");
-}
+
