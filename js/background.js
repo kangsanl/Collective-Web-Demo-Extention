@@ -1,5 +1,5 @@
-function postExtractEntitiesRequest(regionOfInterest) {
-    console.log("asking service to extract entities");
+function sendEntity(type, apiSignature, body) {
+    console.log("sending entity to server");
 
     var xhr = new XMLHttpRequest();    
     xhr.onreadystatechange = function () { 
@@ -10,9 +10,16 @@ function postExtractEntitiesRequest(regionOfInterest) {
 			}
 		}
     };
-    xhr.open("POST", "http://127.0.0.1:86/api/v1/ws_entities?url=https://www.expedia.com/Flights-Search", true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(encodeURIComponent(regionOfInterest));
+    xhr.open(type, apiSignature, true);
+
+    if (body) {
+        xhr.setRequestHeader("Content-type", "application/json");
+        //xhr.send(encodeURIComponent(body));
+        xhr.send(body);
+    }
+    else {
+        xhr.send();
+    }
 }
 
 browser.runtime.onMessage.addListener(
@@ -20,7 +27,6 @@ browser.runtime.onMessage.addListener(
         console.log("received message");
         console.log(request.msgType);
         if (request.msgType === "extractEntities") {
-            //console.log(request.regionOfInterest);
-            postExtractEntitiesRequest(request.regionOfInterest);
+            sendEntity(request.type, request.apiSignature, request.body);
         }
     });

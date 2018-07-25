@@ -15,15 +15,16 @@
                 // remove button after clicking
                 selectedList.removeChild(button);
 
-                // user clicked the button - notify server
-                //notifyServer(selectedList);
+                //console.log(selectedList.textContent);
 
-                console.log(selectedList.textContent);
+                console.log("sending message");
                 browser.runtime.sendMessage({
+                    msgType: "extractEntities",
                     type: 'post',
-                    apiSignature: 'http://127.0.0.1:86/api/v1/picl_entities?url=' + url,
+                    apiSignature: "http://127.0.0.1:86/api/v1/picl_entities?url=" + url,
                     body: selectedList.textContent
-                  });
+                });
+                console.log("message sent");
             }
 
             // This is for Trip Advisor
@@ -34,11 +35,15 @@
                 // remove button after clicking
                 selectedList.removeChild(button);
                 console.log(url);
+
+                console.log("sending message");
                 browser.runtime.sendMessage({
+                    msgType: "extractEntities",
                     type: 'get',
-                    apiSignature: 'http//127.0.0.1:86/api/v1/ws_entities?url=' + url,
+                    apiSignature: "http//127.0.0.1:86/api/v1/ws_entities?url=" + url,
                     body: null
-                  });
+                });
+                console.log("message sent");
             }
 
             var button = document.createElement("Button");
@@ -105,12 +110,4 @@
     }
 })();
 
-function notifyServer(targetElement) {
-    console.log("sending message");
-    browser.runtime.sendMessage({
-        "msgType": "extractEntities",
-        "regionOfInterest": targetElement.textContent
-    });
-    console.log("sent message");
-    console.log(targetElement.textContent);
-}
+
