@@ -134,12 +134,11 @@ function getInsights() {
     }, function (response) {
         console.log("response");
         console.log(response);
-        /*if (response != undefined) {
-            if (response.card) {
-                g_card = response.card;
-                callback(response.card);
-            }
-        }*/
+        var parsedResponse = JSON.parse(response);
+        console.log(parsedResponse.StartDate);
+        console.log(parsedResponse.EndDate);
+        console.log(parsedResponse.StartDestination);
+        console.log(parsedResponse.EndDestination);
     });
     console.log("message sent");
 }
