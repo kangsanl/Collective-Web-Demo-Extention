@@ -21,7 +21,7 @@
                 browser.runtime.sendMessage({
                     msgType: "extractEntities",
                     type: 'post',
-                    apiSignature: "http://127.0.0.1:86/api/v1/picl_entities?url=" + url,
+                    apiSignature: "http://127.0.0.1:86/api/v1/picl_entities?url=" + encodeURIComponent(url),
                     body: selectedList.textContent
                 });
                 console.log("message sent");
@@ -40,7 +40,7 @@
                 browser.runtime.sendMessage({
                     msgType: "extractEntities",
                     type: 'get',
-                    apiSignature: 'http://127.0.0.1:86/api/v1/entities?url=' + url,
+                    apiSignature: 'http://127.0.0.1:86/api/v1/entities?url=' + encodeURIComponent(url),
                     body: null
                 });
                 console.log("message sent");
@@ -122,7 +122,7 @@ function getInsights() {
     browser.runtime.sendMessage({
         msgType: "insights",
         type: 'get',
-        apiSignature: 'http://127.0.0.1:86/api/v1/insights?url=' + url,
+        apiSignature: 'http://127.0.0.1:86/api/v1/insights?url=' + encodeURIComponent(url),
         body: null
     }, function (response) {
         console.log("response");
@@ -135,9 +135,9 @@ function getInsights() {
         console.log(parsedResponse.EndDestination);
 
         var startDate = new Date(parsedResponse.StartDate);
-        var startDateStr = (startDate.getMonth() + 1) + '/' + startDate.getDate() + '/' + (startDate.getFullYear() + 1);
+        var startDateStr = (startDate.getMonth() + 1) + '/' + startDate.getDate() + '/' + (startDate.getFullYear());
         var endDate = new Date(parsedResponse.EndDate);
-        var endDateStr = (endDate.getMonth() + 1) + '/' + endDate.getDate() + '/' + (endDate.getFullYear() + 1);
+        var endDateStr = (endDate.getMonth() + 1) + '/' + endDate.getDate() + '/' + (endDate.getFullYear());
 
         console.log(startDateStr);
         console.log(endDateStr);
